@@ -1,0 +1,11 @@
+logs/
+.logs/
+
+build/
+.idea/
+node_modules/
+*.swp
+*.log
+.vscode/
+dist/**/*.map
+.editorconfig
