@@ -1,0 +1,12 @@
+@font-face {
+    font-family: 'MyFont';
+    src: url('./UniTortred.ttf') format('woff2');
+    font-weight: 800;
+    font-style: italic;
+}
+
+.hello {
+    color: yellow;
+    background: url('./qyc.jpg');
+    font-family: 'MyFont';
+}
