@@ -2,7 +2,7 @@
   "name": "webpack-sheng-gao",
   "version": "1.0.1",
   "description": "webpack学习",
-  "private": true,
+  "private": false,
   "scripts": {
     "build": "webpack",
     "watch": "webpack --watch",
