@@ -50,6 +50,7 @@
     "babel-runtime": "^6.26.0",
     "ejs-loader": "^0.3.3",
     "lodash": "^4.17.15",
+    "moment": "^2.24.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-redux": "^7.1.0",
