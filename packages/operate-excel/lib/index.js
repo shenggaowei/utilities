@@ -30,6 +30,16 @@ read.getJson().then((data) => {
     });
     return combineByName;
   });
+  // 给 sheet 添加表头
+  function getCommonHead() {
+    const watcherNameColumn = watcherNameArray.map((ele) => [ele, ele]).flat();
+    const watcherCycleColumn = watcherNameArray
+      .map((ele) => ["Lmin", "Lmax"])
+      .flat();
+    const firstHead = ["", ...watcherNameColumn];
+    const secondHead = ["周期（F）", ...watcherCycleColumn];
+    return [firstHead, secondHead];
+  }
 
   const sheetRows = sheetArray.map((sheet) => {
     const row = sheet.map((row) => {
@@ -46,6 +56,8 @@ read.getJson().then((data) => {
       renderRow.unshift(info.id);
       return renderRow;
     });
+    const sheetHead = getCommonHead();
+    row.unshift(...sheetHead);
     return row;
   });
 
