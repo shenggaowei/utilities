@@ -1,40 +1,64 @@
-const glob = require("glob");
 const _ = require("lodash");
+const read = require("./readFile");
+const XLSX = require("xlsx");
 
-// 获取文件
-async function getFiles(dir) {
-  const data = await new Promise((resolve) => {
-    glob(
-      `**/*.tif`,
-      {
-        cwd: `./data/`,
-      },
-      function (er, files) {
-        resolve(files);
-      }
-    );
+read.getJson().then((data) => {
+  const { groupData, watcherNameArray } = data;
+  const sheetNames = Object.keys(groupData);
+  const sheetArray = sheetNames.map((ele, index) => {
+    const currentSheet = groupData[ele];
+    const groupById = _.groupBy(currentSheet, "id");
+    const combineByName = Object.entries(groupById).map(([id, value]) => {
+      const groupByName = _.groupBy(value, "name");
+      return Object.entries(groupByName).map(([name, data]) => {
+        if (data.length === 1) {
+          return data[0];
+        } else {
+          let totalLmin = "",
+            totalLmax = "";
+          data.forEach((item) => {
+            totalLmin = totalLmin + item.Lmin + " | ";
+            totalLmax = totalLmax + item.Lmax + " | ";
+          });
+          return {
+            ...data[0],
+            Lmin: totalLmin,
+            Lmax: totalLmax,
+          };
+        }
+      });
+    });
+    return combineByName;
   });
-  return data;
-}
 
-// 匹配出关键信息
-function getKeyWord(data) {
-  return data.map((pathName) => {
-    const [watcherName, dir, fileName] = pathName.split("/");
-    const reg = /(\d{1,2})\.00_L(\d{2}\.\d{2})_(\d{2}\.\d{2})/;
-    const match = fileName.match(reg);
-    return {
-      name: watcherName,
-      dir,
-      id: match[1],
-      Lmin: match[2],
-      Lmax: match[3],
-    };
+  const sheetRows = sheetArray.map((sheet) => {
+    const row = sheet.map((row) => {
+      const info = row[0];
+      const renderRow = watcherNameArray.reduce((pre, next, index) => {
+        const current = row.find((ele) => ele.name === next);
+        if (current?.name == next) {
+          pre.push(current.Lmin, current.Lmax);
+        } else {
+          pre.push("暂无", "暂无");
+        }
+        return pre;
+      }, []);
+      renderRow.unshift(info.id);
+      return renderRow;
+    });
+    return row;
   });
-}
 
-getFiles().then((data) => {
-  const info = getKeyWord(data);
-  const groupData = _.groupBy(info, "dir");
-  console.log(groupData);
+  const Sheets = sheetNames.reduce((pre, next, index) => {
+    pre[next] = XLSX.utils.aoa_to_sheet(sheetRows[index]);
+    return pre;
+  }, {});
+
+  XLSX.writeFile(
+    {
+      SheetNames: sheetNames,
+      Sheets,
+    },
+    "happy.xlsx"
+  );
 });
