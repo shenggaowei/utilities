@@ -14,16 +14,16 @@ read.getJson().then((data) => {
         if (data.length === 1) {
           return data[0];
         } else {
-          let totalLmin = "",
-            totalLmax = "";
+          let totalMin = "",
+            totalMax = "";
           data.forEach((item) => {
-            totalLmin = totalLmin + item.Lmin + " | ";
-            totalLmax = totalLmax + item.Lmax + " | ";
+            totalMin = totalMin + item.min + " | ";
+            totalMax = totalMax + item.max + " | ";
           });
           return {
             ...data[0],
-            Lmin: totalLmin,
-            Lmax: totalLmax,
+            min: totalMin,
+            max: totalMax,
           };
         }
       });
@@ -34,7 +34,7 @@ read.getJson().then((data) => {
   function getCommonHead() {
     const watcherNameColumn = watcherNameArray.map((ele) => [ele, ele]).flat();
     const watcherCycleColumn = watcherNameArray
-      .map((ele) => ["Lmin", "Lmax"])
+      .map((ele) => ["min", "max"])
       .flat();
     const firstHead = ["", ...watcherNameColumn];
     const secondHead = ["周期（F）", ...watcherCycleColumn];
@@ -47,7 +47,7 @@ read.getJson().then((data) => {
       const renderRow = watcherNameArray.reduce((pre, next, index) => {
         const current = row.find((ele) => ele.name === next);
         if (current?.name == next) {
-          pre.push(current.Lmin, current.Lmax);
+          pre.push(current.min, current.max);
         } else {
           pre.push("暂无", "暂无");
         }
@@ -71,6 +71,6 @@ read.getJson().then((data) => {
       SheetNames: sheetNames,
       Sheets,
     },
-    "happy.xlsx"
+    "C.xlsx"
   );
 });
