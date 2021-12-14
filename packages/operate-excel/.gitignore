@@ -1,4 +1,5 @@
-/data
+/input
+/output
 /node_modules
 *.xlsx
 *.tif

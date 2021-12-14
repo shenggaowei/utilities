@@ -1,5 +1,6 @@
 const _ = require("lodash");
 const { Command } = require("commander");
+const fs = require("fs");
 const read = require("./readFile");
 const XLSX = require("xlsx");
 
@@ -77,6 +78,16 @@ async function generateExcel(colorType) {
     pre[next] = XLSX.utils.aoa_to_sheet(sheetRows[index]);
     return pre;
   }, {});
+
+  const hasOutput = await new Promise((resolve, reject) => {
+    fs.stat("./output", (err, stats) => {
+      resolve(!err);
+    });
+  });
+
+  if (!hasOutput) {
+    fs.mkdirSync("./output");
+  }
 
   XLSX.writeFile(
     {

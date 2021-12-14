@@ -6,7 +6,7 @@ async function getFiles(type) {
     glob(
       `**/*.tif`,
       {
-        cwd: `./data/${type}/`,
+        cwd: `./input/${type}/`,
       },
       function (er, files) {
         resolve(files);
