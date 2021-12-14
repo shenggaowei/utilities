@@ -20,7 +20,7 @@ function getKeyWord(data) {
   return data.map((pathName) => {
     const [watcherName, dir, fileName] = pathName.split("/");
     const f_reg = /CSF_\w{2}_F([\s\d]{2}.00)/;
-    const value_reg = /[_LCH]{2}(\d+.\d+_\d+.\d+)/g;
+    const value_reg = /[_LCH]{2}([\s\d]+.[\s\d]+_[\s\d]+.[\s\d]+)/g;
     const id = fileName.match(f_reg)[1];
     const [min, max] = value_reg.exec(fileName)[1].split("_");
     return {

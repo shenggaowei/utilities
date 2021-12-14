@@ -8,10 +8,12 @@ import { getJson } from "./readFile.js";
 const program = new Command();
 program.version("0.0.3");
 
-program.option("-t, --type <type>", "add a generate type", "L");
+program
+  .option("-t, --type <type>", "add a generate type", "L")
+  .option("-d, --dele <dele>", "delete output dir", "0");
 program.parse();
 
-const { type } = program.opts();
+const { type, dele } = program.opts();
 
 async function generateExcel(colorType) {
   const data = await getJson(colorType);
@@ -80,9 +82,11 @@ async function generateExcel(colorType) {
     return pre;
   }, {});
 
-  await fs.rmSync("./output", { force: true, recursive: true });
-  fs.mkdirSync("./output");
-  console.log(chalk.green("output文件夹清理完成"));
+  if (dele == 1) {
+    fs.rmSync("./output", { force: true, recursive: true });
+    fs.mkdirSync("./output");
+    console.log(chalk.green("output文件夹清理完成"));
+  }
 
   XLSX.writeFile(
     {
