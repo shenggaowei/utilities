@@ -1,10 +1,21 @@
 const _ = require("lodash");
+const { Command } = require("commander");
 const read = require("./readFile");
 const XLSX = require("xlsx");
 
-read.getJson().then((data) => {
+const program = new Command();
+program.version("0.0.3");
+
+program.option("-t, --type <type>", "add a generate type", "L");
+program.parse();
+
+const { type } = program.opts();
+
+async function generateExcel(colorType) {
+  const data = await read.getJson(colorType);
   const { groupData, watcherNameArray } = data;
   const sheetNames = Object.keys(groupData);
+
   const sheetArray = sheetNames.map((ele, index) => {
     const currentSheet = groupData[ele];
     const groupById = _.groupBy(currentSheet, "id");
@@ -30,6 +41,7 @@ read.getJson().then((data) => {
     });
     return combineByName;
   });
+
   // 给 sheet 添加表头
   function getCommonHead() {
     const watcherNameColumn = watcherNameArray.map((ele) => [ele, ele]).flat();
@@ -71,6 +83,8 @@ read.getJson().then((data) => {
       SheetNames: sheetNames,
       Sheets,
     },
-    "C.xlsx"
+    `./output/${colorType}.xlsx`
   );
-});
+}
+
+generateExcel(type);

@@ -1,12 +1,12 @@
 const glob = require("glob");
 const _ = require("lodash");
 
-async function getFiles() {
+async function getFiles(type) {
   const data = await new Promise((resolve) => {
     glob(
       `**/*.tif`,
       {
-        cwd: `./data/`,
+        cwd: `./data/${type}/`,
       },
       function (er, files) {
         resolve(files);
@@ -33,16 +33,15 @@ function getKeyWord(data) {
   });
 }
 
-async function getJson() {
-  return getFiles().then((data) => {
-    const info = getKeyWord(data);
-    const groupData = _.groupBy(info, "dir");
-    const watcherNameArray = Object.keys(_.groupBy(info, "name"));
-    return {
-      groupData,
-      watcherNameArray,
-    };
-  });
+async function getJson(type) {
+  const data = await getFiles(type);
+  const info = getKeyWord(data);
+  const groupData = _.groupBy(info, "dir");
+  const watcherNameArray = Object.keys(_.groupBy(info, "name"));
+  return {
+    groupData,
+    watcherNameArray,
+  };
 }
 
 module.exports.getJson = getJson;
