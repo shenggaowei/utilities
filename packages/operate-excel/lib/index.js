@@ -2,6 +2,7 @@ import _ from "lodash";
 import { Command } from "commander";
 import XLSX from "xlsx";
 import fs from "fs";
+import chalk from "chalk";
 import { getJson } from "./readFile.js";
 
 const program = new Command();
@@ -79,15 +80,9 @@ async function generateExcel(colorType) {
     return pre;
   }, {});
 
-  const hasOutput = await new Promise((resolve, reject) => {
-    fs.stat("./output", (err, stats) => {
-      resolve(!err);
-    });
-  });
-
-  if (!hasOutput) {
-    fs.mkdirSync("./output");
-  }
+  await fs.rmSync("./output", { force: true, recursive: true });
+  fs.mkdirSync("./output");
+  console.log(chalk.green("output文件夹清理完成"));
 
   XLSX.writeFile(
     {
@@ -96,6 +91,7 @@ async function generateExcel(colorType) {
     },
     `./output/${colorType}.xlsx`
   );
+  console.log(chalk.green(`output/${colorType}.xlsx已经生成`));
 }
 
 generateExcel(type);
