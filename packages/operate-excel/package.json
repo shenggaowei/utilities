@@ -2,7 +2,8 @@
   "name": "excel_read",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "exports": "./lib/index.js",
+  "type": "module",
   "directories": {
     "lib": "lib"
   },

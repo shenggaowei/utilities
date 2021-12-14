@@ -1,5 +1,5 @@
-const glob = require("glob");
-const _ = require("lodash");
+import glob from "glob";
+import _ from "lodash";
 
 async function getFiles(type) {
   const data = await new Promise((resolve) => {
@@ -33,7 +33,7 @@ function getKeyWord(data) {
   });
 }
 
-async function getJson(type) {
+export async function getJson(type) {
   const data = await getFiles(type);
   const info = getKeyWord(data);
   const groupData = _.groupBy(info, "dir");
@@ -43,5 +43,3 @@ async function getJson(type) {
     watcherNameArray,
   };
 }
-
-module.exports.getJson = getJson;

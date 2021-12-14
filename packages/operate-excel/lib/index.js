@@ -1,8 +1,8 @@
-const _ = require("lodash");
-const { Command } = require("commander");
-const fs = require("fs");
-const read = require("./readFile");
-const XLSX = require("xlsx");
+import _ from "lodash";
+import { Command } from "commander";
+import XLSX from "xlsx";
+import fs from "fs";
+import { getJson } from "./readFile.js";
 
 const program = new Command();
 program.version("0.0.3");
@@ -13,7 +13,7 @@ program.parse();
 const { type } = program.opts();
 
 async function generateExcel(colorType) {
-  const data = await read.getJson(colorType);
+  const data = await getJson(colorType);
   const { groupData, watcherNameArray } = data;
   const sheetNames = Object.keys(groupData);
 
