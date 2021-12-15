@@ -1,12 +1,12 @@
 import glob from "glob";
 import _ from "lodash";
 
-async function getFiles(type) {
+export async function getFiles(type, prefix = "./input") {
   const data = await new Promise((resolve) => {
     glob(
       `**/*.tif`,
       {
-        cwd: `./input/${type}/`,
+        cwd: `${prefix}/${type}/`,
       },
       function (er, files) {
         resolve(files);
