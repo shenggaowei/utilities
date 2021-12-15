@@ -37,10 +37,10 @@ async function replaceName() {
       return `${newP1}.${p2}_${p3}.${p4}`;
     });
     const currentPaths = rest.join("/");
-    const newPath = `./input/${currentPaths}/${newFileName}`;
-    fs.renameSync(`./input/${pathName}`, newPath);
+    const newPath = `${dir}/${currentPaths}/${newFileName}`;
+    fs.renameSync(`${dir}/${pathName}`, newPath);
   });
   console.log(chalk.green("文件更名成功"));
 }
 
-replaceName(type);
+replaceName();
