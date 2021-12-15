@@ -5,7 +5,7 @@ import chalk from "chalk";
 
 const program = new Command();
 
-program.option("-t, --type <type>", "add a generate type", "L");
+program.option("-t, --type <type>", "add a replace type", "H");
 program.parse();
 
 const { type } = program.opts();
