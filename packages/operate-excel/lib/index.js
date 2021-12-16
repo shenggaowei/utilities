@@ -25,25 +25,37 @@ async function generateExcel(colorType) {
     const groupById = _.groupBy(currentSheet, "id");
     const combineByName = Object.entries(groupById).map(([id, value]) => {
       const groupByName = _.groupBy(value, "name");
-      return Object.entries(groupByName).map(([name, data]) => {
-        if (data.length === 1) {
-          return data[0];
-        } else {
-          let totalMin = "",
-            totalMax = "";
-          data.forEach((item) => {
-            totalMin = totalMin + item.min + " | ";
-            totalMax = totalMax + item.max + " | ";
-          });
-          return {
-            ...data[0],
-            min: totalMin,
-            max: totalMax,
-          };
-        }
-      });
+      return Object.entries(groupByName)
+        .map(([name, data]) => {
+          if (data.length === 1) {
+            return { ...data[0], index: 0 };
+          } else {
+            return data.map((item, index) => {
+              return {
+                ...item,
+                index,
+              };
+            });
+          }
+        })
+        .flat();
     });
     return combineByName;
+  });
+
+  const flatSheetArray = sheetArray.map((ele) => {
+    return ele
+      .map((subEle) => {
+        const groupByName = _.groupBy(subEle, "index");
+        const sortedRow = Object.entries(groupByName).map(([index, data]) => {
+          return watcherNameArray.map((name) => {
+            const current = data.find((ele) => ele.name === name);
+            return current;
+          });
+        });
+        return sortedRow;
+      })
+      .flat();
   });
 
   // 给 sheet 添加表头
@@ -57,15 +69,15 @@ async function generateExcel(colorType) {
     return [firstHead, secondHead];
   }
 
-  const sheetRows = sheetArray.map((sheet) => {
+  const sheetRows = flatSheetArray.map((sheet) => {
     const row = sheet.map((row) => {
-      const info = row[0];
+      const info = row.find((ele) => !!ele);
       const renderRow = watcherNameArray.reduce((pre, next, index) => {
-        const current = row.find((ele) => ele.name === next);
+        const current = row.find((ele) => ele?.name === next);
         if (current?.name == next) {
           pre.push(current.min, current.max);
         } else {
-          pre.push("暂无", "暂无");
+          pre.push("", "");
         }
         return pre;
       }, []);
