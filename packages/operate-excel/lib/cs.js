@@ -61,10 +61,8 @@ async function generateExcel(colorType) {
   // 给 sheet 添加表头
   function getCommonHead() {
     const watcherNameColumn = watcherNameArray.map((ele) => [ele]).flat();
-    const watcherCycleColumn = watcherNameArray.map((ele) => ["CS"]).flat();
-    const firstHead = ["", ...watcherNameColumn];
-    const secondHead = ["周期（F）", ...watcherCycleColumn];
-    return [firstHead, secondHead];
+    const firstHead = ["周期（F）", ...watcherNameColumn];
+    return [firstHead];
   }
 
   const sheetRows = sheetArray.map((sheet) => {
