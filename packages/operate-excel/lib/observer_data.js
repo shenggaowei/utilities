@@ -75,7 +75,7 @@ async function generateExcel(colorType) {
       const renderRow = watcherNameArray.reduce((pre, next, index) => {
         const current = row.find((ele) => ele?.name === next);
         if (current?.name == next) {
-          pre.push(current.min, current.max);
+          pre.push(+current.min, +current.max);
         } else {
           pre.push("", "");
         }

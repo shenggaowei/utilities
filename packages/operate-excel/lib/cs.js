@@ -31,7 +31,7 @@ async function generateExcel(colorType) {
           const max = +data[0].max;
           return {
             ...data[0],
-            total_ave: ((max + min) / (max - min)).toFixed(2),
+            total_ave: +((max + min) / (max - min)).toFixed(2),
           };
         } else {
           const { min_total, max_total } = data.reduce(
@@ -47,7 +47,7 @@ async function generateExcel(colorType) {
           );
           return {
             ...data[0],
-            total_ave: (
+            total_ave: +(
               (min_total + max_total) /
               (max_total - min_total)
             ).toFixed(2),
