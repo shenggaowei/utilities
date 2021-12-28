@@ -19,7 +19,7 @@ export async function getFiles(type, prefix = "./input") {
 function getKeyWord(data) {
   return data.map((pathName) => {
     const [watcherName, dir, fileName] = pathName.split("/");
-    const f_reg = /CSF_\w{2}_F([\s\d]{2}.00)/;
+    const f_reg = /CSF_\w{2}_F([\s\d]{2}.\d+)/;
     const value_reg = /[_LCH]{2}([\s\d]+.[\s\d]+_[\s\d]+.[\s\d]+)/g;
     const id = fileName.match(f_reg)[1];
     const [min, max] = value_reg.exec(fileName)[1].split("_");
